@@ -7,7 +7,6 @@
 
 using namespace std;
 
-// Struct Pelanggan
 struct Pelanggan {
     char nama[100];
     string alamat;
@@ -19,44 +18,40 @@ struct Pelanggan {
     int tarif;
 };
 
-// Struct Kamar
 struct Kamar {
     char tipe_ac;
     char tipe_kenyamanan;
     char ukuran;
     int nomor_kamar;
     int tarif;
-    int status; // 0: tersedia 1: sudah dipesan
-    vector<Pelanggan> daftar_pelanggan; // Daftar pelanggan yang menempati kamar
-    Pelanggan pel; // Informasi pelanggan yang menempati kamar
-    Kamar* next; // Pointer untuk linked list
+    int status; // 0: tersedia, 1: sudah dipesan
+    vector<Pelanggan> daftar_pelanggan;
+    Pelanggan pel;
+    Kamar* next;
 };
 
-// Pointer head untuk linked list
 Kamar* head = nullptr;
 
 void enqueue(int data);
 
-// Struktur untuk Stack Node
 struct StackNode {
     int nomorKamar;
     StackNode* next;
 };
 
-// Struktur untuk Queue Node
 struct QueueNode {
     int nomorKamar;
     QueueNode* next;
 };
 
-// Top untuk Stack
+// top untuk Stack
 StackNode* top = nullptr;
 
-// Front dan Rear untuk Queue
+// front dan rear untuk Queue
 QueueNode* front = nullptr;
 QueueNode* rear = nullptr;
 
-// Fungsi untuk menambah riwayat ke Stack (push)
+// fungsi untuk menambah riwayat ke Stack
 void push(int nomorKamar) {
     StackNode* newNode = new StackNode();
     newNode->nomorKamar = nomorKamar;
@@ -64,7 +59,7 @@ void push(int nomorKamar) {
     top = newNode;
 }
 
-// Fungsi untuk menghapus riwayat dari Stack (pop)
+// fungsi untuk menghapus riwayat dari Stack
 void pop() {
     if (top == nullptr) {
         cout << "\nStack kosong!";
@@ -75,7 +70,7 @@ void pop() {
     delete temp;
 }
 
-// Fungsi untuk menampilkan riwayat Stack
+// fungsi untuk menampilkan riwayat Stack
 void displayStack() {
     StackNode* temp = top;
     if (temp == nullptr) {
@@ -89,7 +84,7 @@ void displayStack() {
     }
 }
 
-// Fungsi untuk menambah antrian ke Queue (enqueue)
+// fungsi untuk menambah antrian ke Queue
 void enqueue(int nomorKamar) {
     QueueNode* newNode = new QueueNode();
     newNode->nomorKamar = nomorKamar;
@@ -103,7 +98,7 @@ void enqueue(int nomorKamar) {
     }
 }
 
-// Fungsi untuk menghapus dari antrian Queue (dequeue)
+// fungsi untuk menghapus dari antrian Queue
 void dequeue() {
     if (front == nullptr) {
         cout << "\nQueue kosong!";
@@ -119,7 +114,7 @@ void dequeue() {
     delete temp;
 }
 
-// Fungsi untuk menampilkan antrian Queue
+// fungsi untuk menampilkan antrian Queue
 void displayQueue() {
     QueueNode* temp = front;
     if (temp == nullptr) {
@@ -133,52 +128,52 @@ void displayQueue() {
     }
 }
 
-// Fungsi untuk validasi ID pemesanan agar unik
+// fungsi untuk memvalidasi ID pemesanan agar unik
 bool isUniqueID(int id) {
     Kamar* temp = head;
     while (temp != nullptr) {
         for (const auto& pelanggan : temp->daftar_pelanggan) {
             if (pelanggan.id_pemesanan == id) {
-                return false;  // ID sudah ada
+                return false; // ID sudah ada
             }
         }
         temp = temp->next;
     }
-    return true;  // ID unik
+    return true; // ID unik
 }
 
-// Fungsi untuk memeriksa apakah format tanggal valid (DD/MM/YYYY)
+// fungsi untuk memeriksa apakah format tanggal valid
 bool isValidDate(const string& date) {
     // Regex untuk format tanggal DD/MM/YYYY
     regex datePattern("(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/(19|20)\\d\\d");
     return regex_match(date, datePattern);
 }
 
-// Fungsi Tambah Kamar
+// fungsi tambah kamar
 void tambahKamar(int noKamar) {
     system("cls");
     cout << "\n============ Tambah Kamar ============";
 
-    // Validasi input nomor kamar hanya menerima angka
+    // validasi input nomor kamar hanya menerima angka
     while (true) {
         cout << "\nMasukkan nomor kamar : ";
         cin >> noKamar;
         
-        if (cin.fail()) {  // Memeriksa jika input bukan angka
+        if (cin.fail()) {
             cout << "Error: Masukkan hanya angka untuk nomor kamar.\n";
-            cin.clear(); // Menghapus flag error
-            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Membuang input yang salah
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // abaikan input yang salah
         } else {
-            break;  // Input valid, keluar dari loop
+            break;  // input valid, keluar dari loop
         }
     }
 
-    // Pengecekan apakah nomor kamar sudah ada
+    // pengecekan apakah nomor kamar sudah ada
     Kamar* temp = head;
     while (temp != nullptr) {
         if (temp->nomor_kamar == noKamar) {
             cout << "\nError: Nomor kamar " << noKamar << " sudah ada. Silakan masukkan nomor lain.\n";
-            return; // Keluar dari fungsi jika nomor kamar sudah ada
+            return;
         }
         temp = temp->next;
     }
@@ -191,7 +186,7 @@ void tambahKamar(int noKamar) {
     }
     newKamar->nomor_kamar = noKamar;
 
-    // Input tipe AC/Non-AC dengan validasi
+    // validasi tipe AC, input 'A' atau 'N'
     while (true) {
         cout << "\nTipe AC/Non-AC (A/N): ";
         cin >> newKamar->tipe_ac;
@@ -202,7 +197,7 @@ void tambahKamar(int noKamar) {
         }
     }
 
-    // Input tipe kenyamanan dengan validasi
+    // validasi tipe kenyamanan, input 'S' atau 'N'
     while (true) {
         cout << "\nTipe Kenyamanan (S/N): ";
         cin >> newKamar->tipe_kenyamanan;
@@ -213,7 +208,7 @@ void tambahKamar(int noKamar) {
         }
     }
 
-    // Input ukuran dengan validasi
+    // validate ukuran, input 'B' atau 'S'
     while (true) {
         cout << "\nUkuran (B/S): ";
         cin >> newKamar->ukuran;
@@ -224,17 +219,17 @@ void tambahKamar(int noKamar) {
         }
     }
 
-    // Input tarif harian dengan validasi input numerik
+    // validasi tarif, input angka positif
     while (true) {
         cout << "\nTarif Harian: ";
         cin >> newKamar->tarif;
         
         if (cin.fail() || newKamar->tarif < 0) {
-            cout << "Error: Masukkan nilai numerik positif untuk tarif.\n";
+            cout << "Error: Masukkan angka positif untuk tarif.\n";
             cin.clear(); // Menghapus flag error
-            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Membuang input yang salah
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
         } else {
-            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Membersihkan buffer
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             break;
         }
     }
@@ -260,17 +255,17 @@ void editKamar() {
     int noKamar;
     system("cls");
     cout << "\n============ Edit Kamar ============";
-    // Validasi input nomor kamar hanya menerima angka
+    // validasi input nomor kamar, hanya menerima angka
     while (true) {
         cout << "\nMasukkan nomor kamar : ";
         cin >> noKamar;
         
-        if (cin.fail()) {  // Memeriksa jika input bukan angka
+        if (cin.fail()) {
             cout << "Error: Masukkan hanya angka untuk nomor kamar.\n";
-            cin.clear(); // Menghapus flag error
-            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Membuang input yang salah
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
         } else {
-            break;  // Input valid, keluar dari loop
+            break;
         }
     }
 
@@ -279,7 +274,6 @@ void editKamar() {
         if (temp->nomor_kamar == noKamar) {
             cout << "\nMengedit kamar nomor: " << temp->nomor_kamar;
 
-            // Edit tipe AC
             while (true) {
                 cout << "\nTipe AC/Non-AC saat ini: " << temp->tipe_ac;
                 cout << "\nMasukkan tipe baru (A untuk AC, N untuk Non-AC): ";
@@ -291,7 +285,6 @@ void editKamar() {
                 }
             }
 
-            // Edit tipe kenyamanan
             while (true) {
                 cout << "\nTipe Kenyamanan saat ini: " << temp->tipe_kenyamanan;
                 cout << "\nMasukkan tipe baru (S untuk Standar, N untuk Nyaman): ";
@@ -303,7 +296,6 @@ void editKamar() {
                 }
             }
 
-            // Edit ukuran
             while (true) {
                 cout << "\nUkuran saat ini: " << temp->ukuran;
                 cout << "\nMasukkan ukuran baru (B untuk Besar, S untuk Sedang): ";
@@ -315,7 +307,6 @@ void editKamar() {
                 }
             }
 
-            // Edit tarif
             while (true) {
                 cout << "\nTarif saat ini: " << temp->tarif;
                 cout << "\nMasukkan tarif baru: ";
@@ -343,14 +334,14 @@ void editKamar() {
 
 
 
-// Fungsi Tampilkan Kamar Tersedia
+// fungsi untuk menampilkan kamar tersedia
 void tampilkanKamarTersedia() {
     Kamar* temp = head;
     bool ditemukan = false;
     system("cls");
     cout << "\n============ Daftar Kamar Tersedia ============";
     while (temp != nullptr) {
-        if (temp->status == 0) { // Kamar tersedia
+        if (temp->status == 0) {
             cout << "\nNomor Kamar: \t" << temp->nomor_kamar;
             cout << "\nTipe AC/Non-AC (A/N): " << temp->tipe_ac;
             cout << "\nTipe Kenyamanan (S/N): " << temp->tipe_kenyamanan;
@@ -367,9 +358,8 @@ void tampilkanKamarTersedia() {
     system("pause");
 }
 
-// Fungsi Check-In
 void checkIn() {
-    tampilkanKamarTersedia(); // Menampilkan kamar yang tersedia terlebih dahulu
+    tampilkanKamarTersedia();
     int noKamar;
     cout << "\nMasukkan nomor kamar untuk check-in: ";
     cin >> noKamar;
@@ -385,21 +375,20 @@ void checkIn() {
             Pelanggan pel;
             cout << "\nMasukkan ID pemesanan: ";
 
-            // Menangani input ID pemesanan
+            // validasi input ID pemesanan
             while (true) {
                 cin >> pel.id_pemesanan;
 
-                // Jika input tidak valid (misalnya huruf atau simbol), beri pesan dan minta input ulang
                 if (cin.fail()) {
-                    cin.clear(); // Bersihkan status error cin
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Abaikan input yang salah
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     cout << "\nID pemesanan hanya boleh berupa angka! Coba lagi: ";
                 } else {
-                    break; // Keluar dari loop jika input valid
+                    break;
                 }
             }
 
-            // Validasi ID Pemesanan Unik
+            // jika id pemesanan sudah digunakan
             if (!isUniqueID(pel.id_pemesanan)) {
                 cout << "\nID pemesanan sudah digunakan! Masukkan ID yang unik.\n";
                 return;
@@ -415,7 +404,7 @@ void checkIn() {
             cout << "\nMasukkan Telepon: ";
             getline(cin, pel.telepon);      
 
-            // Validasi Tanggal Mulai
+            // validasi tanggal mulai
             bool valid = false;
             while (!valid) {
                 cout << "\nMasukkan Tanggal Mulai (DD/MM/YYYY): ";
@@ -427,7 +416,7 @@ void checkIn() {
                 }
             }
 
-            // Validasi Tanggal Selesai
+            // validasi tanggal selesai
             valid = false;
             while (!valid) {
                 cout << "\nMasukkan Tanggal Selesai (DD/MM/YYYY): ";
@@ -442,10 +431,10 @@ void checkIn() {
             cout << "\nMasukkan Pembayaran Di Muka: ";
             cin >> pel.pembayaran_di_muka;
 
-            temp->daftar_pelanggan.push_back(pel); // Tambahkan pelanggan ke daftar
+            temp->daftar_pelanggan.push_back(pel);
 
-            temp->status = 1; // Kamar di-check-in
-            push(noKamar); // Tambahkan ke riwayat check-in
+            temp->status = 1; // status kamar menjadi sudah di-check-in
+            push(noKamar); // tambahkan ke riwayat check-in
             cout << "\nCheck-in berhasil!\n";
             cin.get();
             system("pause");
@@ -499,9 +488,8 @@ void checkOut() {
 }
 
 
-// Fungsi untuk mengurutkan tarif menggunakan Shell Sort
+// mengurutkan tarif menggunakan Shell Sort
 void shellSort() {
-    // Menemukan panjang linked list terlebih dahulu
     Kamar* temp = head;
     int n = 0;
     while (temp != nullptr) {
@@ -509,7 +497,6 @@ void shellSort() {
         temp = temp->next;
     }
 
-    // Menggunakan Shell Sort berdasarkan tarif kamar
     for (int gap = n / 2; gap > 0; gap /= 2) {
         for (int i = gap; i < n; i++) {
             temp = head;
@@ -527,7 +514,6 @@ void shellSort() {
                 if (kamar1->tarif > kamar2->tarif) {
                     swap(kamar1->tarif, kamar2->tarif);
                     swap(kamar1->nomor_kamar, kamar2->nomor_kamar);
-                    // Swap lainnya jika diperlukan
                 }
                 j -= gap;
             }
@@ -535,7 +521,7 @@ void shellSort() {
     }
 }
 
-// Fungsi untuk mengurutkan berdasarkan nomor kamar menggunakan Quick Sort
+// mengurutkan berdasarkan nomor kamar menggunakan Quick Sort
 void quickSort(Kamar* low, Kamar* high) {
     if (low == nullptr || low == high) {
         return;
@@ -564,7 +550,6 @@ int fibonacciSearch(Kamar* head, int target) {
     while (temp != nullptr) {
         if (temp->nomor_kamar == target) {
             if (temp->status == 1) { // Hanya tampilkan jika kamar dipesan
-                // Tampilkan detail kamar yang sudah dipesan
                 cout << "\nDetail Kamar\n";
                 cout << "\nKamar sudah dipesan";
                 cout << "\nNomor Kamar: \t" << temp->nomor_kamar;
@@ -588,7 +573,7 @@ int fibonacciSearch(Kamar* head, int target) {
 }
 
 
-// Fungsi Jump Search (Mencari berdasarkan tarif)
+// mencari berdasarkan tarif
 int jumpSearch(Kamar* head, int target) {
     Kamar* temp = head;
     while (temp != nullptr) {
@@ -612,15 +597,14 @@ int jumpSearch(Kamar* head, int target) {
     }
     cout << "\nKamar tidak ditemukan.\n";
     system("pause");
-    return -1;  // Tidak ditemukan
+    return -1;  // tidak ditemukan
 }
 
-// Fungsi Boyer-Moore Search (Mencari berdasarkan nama pelanggan)
+// mencari berdasarkan nama pelanggan
 int boyerMooreSearch(Kamar* head, const string& target) {
     Kamar* temp = head;
     while (temp != nullptr) {
         if (target == temp->pel.nama) {
-            // Tampilkan detail kamar setelah ditemukan
             cout << "\nDetail Kamar\n";
             if (temp->status == 1) {
                 cout << "\nKamar sudah dipesan";
@@ -639,53 +623,53 @@ int boyerMooreSearch(Kamar* head, const string& target) {
     }
     cout << "\nKamar tidak ditemukan.\n";
     system("pause");
-    return -1;  // Tidak ditemukan
+    return -1; // tidak ditemukan
 }
 
-// Fungsi Menu Pencarian
+// tampilkan menu pencarian
 void menuSearch() {
     int searchOption;
     while (true) {
-    system("cls");
-        cout << "\n===== MENU PENCARIAN =====";
-        cout << "\n1. Cari berdasarkan nomor kamar";
-        cout << "\n2. Cari berdasarkan tarif";
-        cout << "\n3. Cari berdasarkan nama pelanggan";
-        cout << "\nPilih pencarian: ";
-        cin >> searchOption;
+        system("cls");
+            cout << "\n===== MENU PENCARIAN =====";
+            cout << "\n1. Cari berdasarkan nomor kamar";
+            cout << "\n2. Cari berdasarkan tarif";
+            cout << "\n3. Cari berdasarkan nama pelanggan";
+            cout << "\nPilih pencarian: ";
+            cin >> searchOption;
 
-        if (cin.fail()) { // Memeriksa apakah input valid
-            cout << "Input Tidak Valid! Coba Lagi...\n"; // Menampilkan pesan kesalahan input
-            sleep(1);
-            cin.clear(); // Membersihkan status kesalahan input
-            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Mengabaikan sisa input yang salah
-            continue; // Melanjutkan loop untuk input ulang
-        }
-        switch (searchOption) {
-            case 1:
-                int nomorKamar;
-                cout << "\nMasukkan nomor kamar yang dicari: ";
-                cin >> nomorKamar;
-                fibonacciSearch(head, nomorKamar);
-                break;
-            case 2:
-                int tarif;
-                cout << "\nMasukkan tarif yang dicari: ";
-                cin >> tarif;
-                jumpSearch(head, tarif);
-                break;
-            case 3:
-                string namaTarget;
-                cout << "\nMasukkan nama pelanggan yang dicari: ";
-                cin >> namaTarget;
-                boyerMooreSearch(head, namaTarget);
-                break;
-                cout << "\nPilihan tidak valid!";
-        }
+            if (cin.fail()) {
+                cout << "Input Tidak Valid! Coba Lagi...\n";
+                sleep(1);
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                continue;
+            }
+            switch (searchOption) {
+                case 1:
+                    int nomorKamar;
+                    cout << "\nMasukkan nomor kamar yang dicari: ";
+                    cin >> nomorKamar;
+                    fibonacciSearch(head, nomorKamar);
+                    break;
+                case 2:
+                    int tarif;
+                    cout << "\nMasukkan tarif yang dicari: ";
+                    cin >> tarif;
+                    jumpSearch(head, tarif);
+                    break;
+                case 3:
+                    string namaTarget;
+                    cout << "\nMasukkan nama pelanggan yang dicari: ";
+                    cin >> namaTarget;
+                    boyerMooreSearch(head, namaTarget);
+                    break;
+                    cout << "\nPilihan tidak valid!";
+            }
     }
 }
 
-// Fungsi Menu Pengurutan
+// menu pengurutan
 void menuSort() {
     int sortOption;
     cout << "\n===== MENU PENGURUTAN =====";
@@ -718,7 +702,6 @@ void lihatAntrianCheckOut() {
     displayQueue();
 }
 
-
 void lihatRiwayat() {
     int pilihan;
     system("cls");
@@ -730,36 +713,31 @@ void lihatRiwayat() {
         cout << "================================\n";
         cout << "Masukkan pilihan: ";
         
-        // Memeriksa input apakah valid atau tidak
         cin >> pilihan;
 
-        // Jika input gagal (misalnya simbol atau karakter), bersihkan input dan tampilkan pesan error
         if (cin.fail()) {
             cout << "\nInput tidak valid!\n";
             sleep(1);
-            cin.clear(); // Membersihkan status error pada cin
-            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Mengabaikan input yang salah
-            continue; // Kembali ke awal loop untuk meminta input ulang
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            continue;
         }
 
-        // Proses berdasarkan pilihan yang dimasukkan
         switch (pilihan) {
             case 1:
-                lihatRiwayatCheckIn(); // Menampilkan riwayat Check-In
+                lihatRiwayatCheckIn();
                 break;
             case 2:
-                lihatAntrianCheckOut(); // Menampilkan antrian Check-Out
+                lihatAntrianCheckOut();
                 break;
             case 3:
-                return; // Kembali ke menu utama
+                return;
             default:
                 cout << "\nPilihan tidak valid! Silakan pilih lagi.\n";
         }
     } while (pilihan != 3);
 }
 
-
-// Fungsi Main
 int main() {
     int pilihan;
     int noKamar;
@@ -778,12 +756,12 @@ int main() {
         cout << "\nPilih menu: ";
         cin >> pilihan;
 
-        if (cin.fail()) { // Memeriksa apakah input valid
-        cout << "Input Tidak Valid! Coba Lagi...\n"; // Menampilkan pesan kesalahan input
-        sleep(1);
-        cin.clear(); // Membersihkan status kesalahan input
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Mengabaikan sisa input yang salah
-        continue; // Melanjutkan loop untuk input ulang
+        if (cin.fail()) {
+            cout << "Input Tidak Valid! Coba Lagi...\n";
+            sleep(1);
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            continue;
         }
 
         switch (pilihan) {
