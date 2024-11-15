@@ -545,6 +545,7 @@ void quickSort(Kamar* low, Kamar* high) {
     quickSort(temp->next, high);
 }
 
+// mencari nomor kamar
 int fibonacciSearch(Kamar* head, int target) {
     Kamar* temp = head;
     while (temp != nullptr) {
@@ -601,7 +602,7 @@ int jumpSearch(Kamar* head, int target) {
 }
 
 // mencari berdasarkan nama pelanggan
-int boyerMooreSearch(Kamar* head, const string& target) {
+int boyerMooreSearch(Kamar* head, string target) {
     Kamar* temp = head;
     while (temp != nullptr) {
         if (target == temp->pel.nama) {
@@ -618,7 +619,7 @@ int boyerMooreSearch(Kamar* head, const string& target) {
             cout << "\nTarif: " << temp->tarif;
             sleep(5);
             return 1;
-        }
+        }   
         temp = temp->next;
     }
     cout << "\nKamar tidak ditemukan.\n";
@@ -635,6 +636,7 @@ void menuSearch() {
             cout << "\n1. Cari berdasarkan nomor kamar";
             cout << "\n2. Cari berdasarkan tarif";
             cout << "\n3. Cari berdasarkan nama pelanggan";
+            cout << "\n4. Kembali ke Menu Utama";
             cout << "\nPilih pencarian: ";
             cin >> searchOption;
 
@@ -646,35 +648,42 @@ void menuSearch() {
                 continue;
             }
             switch (searchOption) {
-                case 1:
+                case 1: {
                     int nomorKamar;
                     cout << "\nMasukkan nomor kamar yang dicari: ";
                     cin >> nomorKamar;
                     fibonacciSearch(head, nomorKamar);
                     break;
-                case 2:
+                }
+                case 2: {
                     int tarif;
                     cout << "\nMasukkan tarif yang dicari: ";
                     cin >> tarif;
                     jumpSearch(head, tarif);
                     break;
-                case 3:
+                }
+                case 3: {
                     string namaTarget;
                     cout << "\nMasukkan nama pelanggan yang dicari: ";
                     cin >> namaTarget;
                     boyerMooreSearch(head, namaTarget);
                     break;
                     cout << "\nPilihan tidak valid!";
+                }
+                case 4:
+                    return;
             }
     }
 }
 
 // menu pengurutan
 void menuSort() {
+    system("cls");
     int sortOption;
     cout << "\n===== MENU PENGURUTAN =====";
     cout << "\n1. Shell Sort (Urutkan berdasarkan Tarif)";
     cout << "\n2. Quick Sort (Urutkan berdasarkan Nomor Kamar)";
+    cout << "\n3. Kembali ke Menu Utama";
     cout << "\nPilih pengurutan: ";
     cin >> sortOption;
 
@@ -687,6 +696,8 @@ void menuSort() {
             quickSort(head, nullptr);
             tampilkanKamarTersedia();
             break;
+        case 3:
+            return;
         default:
             cout << "\nPilihan tidak valid!";
     }
